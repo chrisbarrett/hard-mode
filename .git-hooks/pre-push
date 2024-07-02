@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e -o pipefail
+
+if [[ -n $CI ]]; then
+    exit
+fi
+
+if command -v nix &>/dev/null; then
+    nix develop --command sh -c 'set -x -e; make test; make lint'
+else
+    (
+        set -x
+        make test
+        make lint
+    )
+fi
